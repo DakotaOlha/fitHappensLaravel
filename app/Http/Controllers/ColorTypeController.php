@@ -10,7 +10,7 @@ class ColorTypeController extends Controller
 {
     protected $openAIService;
 
-    public function __construct(OpenAIService  $openAIService)
+    public function __construct(OpenAIService $openAIService)
     {
         $this->openAIService = $openAIService;
     }
@@ -39,7 +39,7 @@ class ColorTypeController extends Controller
             $hair = $request->input('hair');
             $skin = $request->input('skin');
 
-            $promt = "Визнач кольоротип людини (Весна, Літо, Осінь або Зима).
+            $prompt = "Визнач кольоротип людини (Весна, Літо, Осінь або Зима).
 Відповідай тільки одним словом з цих чотирьох варіантів.
 
 Дані:
@@ -47,7 +47,8 @@ class ColorTypeController extends Controller
 - Волосся: {$hair}
 - Шкіра: {$skin}";
 
-            $colorType = $this->openAIService->detectColorType($promt);
+            // Виправлено: викликаємо getColorType замість detectColorType
+            $colorType = $this->openAIService->getColorType($prompt);
 
             return response()->json([
                 'success' => true,
@@ -60,7 +61,7 @@ class ColorTypeController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Помилка при визначенні кольоротипу: ' . $exception->getMessage()
+                'message' => $exception->getMessage()
             ], 500);
         }
     }
